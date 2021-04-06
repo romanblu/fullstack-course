@@ -1,0 +1,141 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+body {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  /* max-width: 1300px; */
+  flex: 3;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: 30px;
+}
+
+h1 {
+  font-size: 45px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+a {
+  padding-bottom: 1px;
+  color: #2a5ba4;
+  text-decoration: none;
+  border-bottom: 1.5px solid #2a5ba4;
+}
+
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 15px 20px;
+  /* max-width: 1300px; */
+  align-items: center;
+  height: 25px;
+}
+
+.navbar-left {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.navbar-left > li {
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 2px solid black;
+}
+
+.navbar-left > li:nth-last-child(1) {
+  border: none;
+}
+
+.header {
+}
+
+.blog-posts {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 20px;
+}
+
+.post {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 230px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+}
+
+img {
+  height: 100%;
+  display: block;
+  /* margin-right: auto; */
+  /* margin-left: auto; */
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.red {
+  color: red;
+}
+
+.post-image {
+  height: 50%;
+  margin-right: 5px;
+  margin-top: 5px;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 15px;
+  margin-bottom: 10px;
+  /* width: 75%; */
+  font-size: 20px;
+  flex: 2;
+}
+
+.posts-list {
+  border-bottom: 2px solid gray;
+  padding-bottom: 20px;
+}
+
+.posts-list:nth-last-child(1) {
+  border: none;
+}
+
+ul {
+  list-style: none;
+}
+
+.posts-list-item {
+  word-spacing: 3.5px;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.posts-list-item > a {
+  margin-left: 10px;
+}
