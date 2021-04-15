@@ -1,21 +1,10 @@
 import React from 'react';
-import Navbar from '../Navbar';
 import Post from '../Post';
 import PostsList from '../PostsList';
 
 class MainPage extends React.Component{
 
     render() {
-        const leftLinks = [
-            {title:"Home", url: "#"}, 
-            {title:"About Us", url: "#"},
-            {title:"Contact Me", url: "#"}
-        ];
-
-        const rightLinks = [
-            {title:"Sign In", url: "#"}
-        ];
-
         const posts = [
             {
                 title:"Blog post #1",
@@ -79,7 +68,6 @@ class MainPage extends React.Component{
 
         return (
             <div>
-                <Navbar leftLinks={leftLinks} rightLinks={rightLinks}/>
                 <div className="container">
                     <div className="blog-posts">
                         <div className="header"><h1>This is my blog</h1></div>
