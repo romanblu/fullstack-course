@@ -1,7 +1,7 @@
 import React from 'react';
-import Navbar from './Navbar';
-import Post from './Post';
-import PostsList from './PostsList';
+import Navbar from '../Navbar';
+import Post from '../Post';
+import PostsList from '../PostsList';
 
 class MainPage extends React.Component{
 
