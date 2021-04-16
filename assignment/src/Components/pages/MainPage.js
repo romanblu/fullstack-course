@@ -7,6 +7,7 @@ class MainPage extends React.Component{
     render() {
         const posts = [
             {
+                id:0,
                 title:"Blog post #1",
                 description:"My  first blog post  is all about my  blog post  and how to write a new post in my blog, find it here",
                 dateNumber: 2 ,
@@ -15,6 +16,7 @@ class MainPage extends React.Component{
                 imageSrc:"https://cdn.pixabay.com/photo/2015/10/12/20/52/alpaca-985158_960_720.jpg"
             },
             {
+                id:1,
                 title:"Blog post #2",
                 description:"My second blog post is all about my blog post",
                 dateNumber: 2 ,
@@ -23,6 +25,7 @@ class MainPage extends React.Component{
                 imageSrc:"https://images.unsplash.com/photo-1511885663737-eea53f6d6187?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1267&q=80"
             },
             {
+                id: 2,
                 title:"Blog post #3",
                 description:"My third blog post is all about my blog post",
                 dateNumber: 3 ,
@@ -34,7 +37,7 @@ class MainPage extends React.Component{
         ];
             
         const postItems = posts.map(post => (
-            <Post {...post} />
+            <Post {...post} id={post.id} />
         ));
 
         const postsLinks1 = [

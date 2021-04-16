@@ -170,7 +170,7 @@ ul {
   bottom: 0;
 }
 
-#post-content {
+#new-post-content {
   height: 300px;
   width: 500px;
 }
@@ -178,4 +178,11 @@ ul {
 .smaller-font {
   font-size: 14px;
   color: dimgrey;
+}
+
+.post-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 20px;
 }
