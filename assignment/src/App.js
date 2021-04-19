@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import MainPage from './Components/pages/MainPage';
 import About from './Components/pages/About';
-import Contact from './Components/pages/Contact';
 import SignIn from './Components/pages/SignIn';
 import PostPage from './Components/pages/PostPage';
 import NewPost from './Components/pages/NewPost';
