@@ -1,10 +1,34 @@
 import React from 'react';
 import Post from '../Post';
 import PostsList from '../PostsList';
+import axios from 'axios';
 
 class MainPage extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = { data: []  };
+    }
+
+    getAllPosts = () => {
+        const url = "/posts";
+        axios.get(url).then((res) => {
+          console.log(res.data);
+          this.setState({
+            data:res.data,
+            resp:null
+          });
+        });
+      }
+    
+      componentDidMount(){
+        this.getAllPosts();
+      }
 
     render() {
+        this.state.data.forEach(post => {
+            
+        });
+
         const posts = [
             {
                 id:0,
@@ -35,11 +59,14 @@ class MainPage extends React.Component{
             }
             
         ];
-            
-        const postItems = posts.map(post => (
+        console.log(this.state.data);
+        console.log(posts);
+        // const postItems = posts.map(post => (
+        //     <Post {...post} id={post.id} />
+        // ));
+        const postItems = this.state.data.map(post => (
             <Post {...post} id={post.id} />
         ));
-
         const postsLinks1 = [
             {
                 postTitle: "Blog post #1 ",
