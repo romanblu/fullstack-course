@@ -8,7 +8,8 @@ class SignIn extends React.Component {
         this.state = {
             resp: null,
             user:null,
-            password:null
+            password:null,
+            name:null
         };
     }
 
@@ -19,32 +20,38 @@ class SignIn extends React.Component {
         })
     }
 
+    changeName = (e) => {
+        this.setState({
+            name: e.target.value
+        })
+    }
+
     changePassword = (e) => {
         this.setState({
             password: e.target.value
         })
     }
 
-    login = (e) => {
+    signup = (e) => {
         e.preventDefault();
-        const url = "/login";
+        const url = "/signup";
         const data = {
             user : this.state.user,
-            password: this.state.password
+            password: this.state.password,
         }
 
         axios.post(url,data).then(res => {
             this.setState({
                 data: [],
-                resp: "Success, user logged in "
+                resp: "Success, user signed up"
             });
 
-            this.props.onSignIn(data);
+            this.props.onSignIn({user: data.user, password:data.password});
 
         }).catch(err => {
             this.setState({
                 data: [],
-                resp: "Error, could not login user"
+                resp: "Error, could not sign up user"
             });
         });
     }
@@ -53,27 +60,21 @@ class SignIn extends React.Component {
         return (
             <>
                 <Container maxWidth="sm">
-                    <Box mt={"20vh"} alignContent="center">
-                        
+                    <Box mt={"20vh"} alignContent="center">                        
                         <Typography component="h1" variant="h2" align="center">
-                            Login
+                            Sign Up
                         </Typography>
                         <form action="">
                             <TextField onChange={this.changeUsername} label="Username" variant="outlined" required fullWidth margin="normal"/>
                             <TextField onChange={this.changePassword} label="Password" type="password" variant="outlined" required fullWidth margin="normal"/>
+                            <TextField onChange={this.changeRepeatPassword} label="Repeat Password" type="password" variant="outlined" required fullWidth margin="normal"/>
                             <Box mt={2} mb={2}>
-                                <Button onClick={this.login} variant="contained" color="primary" fullWidth type="submit" margin="normal">Login</Button>
+                                <Button onClick={this.signup} variant="contained" color="primary" fullWidth type="submit" margin="normal">Sign Up!</Button>
                             </Box>
-                            <Box textAlign="center">
-                                <Button href="/signin" color="primary">Forgot Username/Password
-                                </Button>
-                                <Button href="/signup" color="secondary">No account? Sign up!
-                                </Button>
-                            </Box>    
+                            
                         </form>
-                       
+                        
 
-               
                     </Box>
                     
                 </Container>

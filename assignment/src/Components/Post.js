@@ -13,7 +13,7 @@ class Post extends React.Component {
                             
                             <p className="description">{this.props.description}</p>
                         </div>
-                        <div className="post-date">Posted {this.props.dateNumber} {this.props.dateUnit} by {this.props.authorName}</div>
+                        <div className="post-date">Posted {this.props.datePosted} by {this.props.authorName}</div>
                     </div>
                     <div className="post-image">
                         <img src={this.props.imageSrc} alt="nice alpaca"/>

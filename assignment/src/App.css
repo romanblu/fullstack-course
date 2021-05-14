@@ -52,6 +52,12 @@ a {
   height: 100%;
 }
 
+.navbar-right {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
 .navbar-left > li {
   margin-right: 15px;
   padding-right: 15px;
@@ -62,6 +68,11 @@ a {
   border: none;
 }
 
+.navbar-right > li {
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 2px solid black;
+}
 .blog-posts {
   display: flex;
   flex-direction: column;
@@ -69,6 +80,9 @@ a {
   margin: 0 20px;
 }
 
+.navbar-right > li:nth-last-child(1) {
+  border: none;
+}
 .post {
   display: flex;
   flex-direction: row;

@@ -1,12 +1,18 @@
 import React from 'react';
 import PostsList from '../PostsList';
 import Post from '../Post';
+import axios from 'axios';
 
 class PostPage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            post: this.posts[0]
+            data: {},
+            user: {
+                name: "",
+                username:"",
+                password:""
+            }
         };
     }
     
@@ -39,10 +45,38 @@ class PostPage extends React.Component {
         
     ];
 
+    getUserById = (id) => {
+        const url  = "/users/" + id;
+        axios.get(url).then((res) => {
+            this.setState({
+              user:res.data,
+              resp:"Successfully got user"
+            });
+            console.log(this.state);
+            
+          });
+    }
+
+    getPostById = (id) => {
+        const url = "/posts/" + id;
+        axios.get(url).then((res) => {
+          this.setState({
+            data:res.data,
+            resp:null
+          });
+
+          this.getUserById(this.state.data.author_id);
+          console.log(this.state);
+        });
+      }
+
+
     componentDidMount (){
         const {id} = this.props.match.params;
-        this.setState( { post: this.posts[id] });
 
+        this.getPostById(id);
+
+        console.log(this.state);
     }
 
     render () {
@@ -80,7 +114,13 @@ class PostPage extends React.Component {
             <div>
                 <div className="container">
                     <div className="blog-posts">
-                            <Post {...this.state.post} />
+                           
+                        <Post title={this.state.data.title} 
+                        description={this.state.data.content} 
+                        authorName={this.state.user.name}
+                        imageSrc={this.state.data.image}
+                        id={this.state.data.id} 
+                        />
                     </div>
 
                     <div className="sidebar">
