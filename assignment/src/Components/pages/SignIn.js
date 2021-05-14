@@ -8,7 +8,8 @@ class SignIn extends React.Component {
         this.state = {
             resp: null,
             user:null,
-            password:null
+            password:null,
+            error: false
         };
     }
 
@@ -36,7 +37,8 @@ class SignIn extends React.Component {
         axios.post(url,data).then(res => {
             this.setState({
                 data: [],
-                resp: "Success, user logged in "
+                resp: "Success, user logged in ",
+                error: false
             });
 
             this.props.onSignIn(data);
@@ -44,7 +46,8 @@ class SignIn extends React.Component {
         }).catch(err => {
             this.setState({
                 data: [],
-                resp: "Error, could not login user"
+                resp: "Error, could not login user",
+                error: true
             });
         });
     }
@@ -59,8 +62,14 @@ class SignIn extends React.Component {
                             Login
                         </Typography>
                         <form action="">
-                            <TextField onChange={this.changeUsername} label="Username" variant="outlined" required fullWidth margin="normal"/>
-                            <TextField onChange={this.changePassword} label="Password" type="password" variant="outlined" required fullWidth margin="normal"/>
+                            <TextField onChange={this.changeUsername} label="Username" variant="outlined" required fullWidth margin="normal"
+                            id="standard-error-helper-text"  helperText="Wrong username or password"
+                            error={this.state.error}
+                            />
+                            <TextField onChange={this.changePassword} label="Password" type="password" variant="outlined" required fullWidth margin="normal"
+                            id="standard-error-helper-text"  helperText="Wrong username or password"
+                            error={this.state.error}
+                            />
                             <Box mt={2} mb={2}>
                                 <Button onClick={this.login} variant="contained" color="primary" fullWidth type="submit" margin="normal">Login</Button>
                             </Box>
@@ -72,7 +81,6 @@ class SignIn extends React.Component {
                             </Box>    
                         </form>
                        
-
                
                     </Box>
                     

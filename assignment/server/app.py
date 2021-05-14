@@ -1,9 +1,10 @@
-from flask import Flask, request, abort
+from flask import Flask, request, abort, make_response
 import requests
 import mysql.connector as mysql
 from settings import apikey, dbpwd
 import json
 import bcrypt
+import uuid 
 
 db = mysql.connect(
 	host="localhost",
@@ -33,9 +34,17 @@ def login():
 	hashed_pwd = record[1].encode('utf-8')
 	if bcrypt.hashpw(data['password'].encode('utf-8'), hashed_pwd) != hashed_pwd:
     		abort(401) 
+
+	session_id = str(uuid.uuid4())
+	query = "insert into sessions (user_id, session_id) values (%s, %s) on duplicate key update session_id=%s"
+	values = (user_id, session_id, session_id)
+	cursor.execute(query, values)
+	db.commit()
+	resp = make_response()
+	resp.set_cookie("session_id", session_id)
 	cursor.close()
 	
-	return ""
+	return resp
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -59,8 +68,6 @@ def get_post(id):
 	cursor.execute(query, values)
 	record = cursor.fetchone()
 	cursor.close()
-	# user = get_user(record[-1])
-	# print(" USER  ", user[1])
 	header = ['id', 'title', 'content', 'image', 'author_id']
 	return json.dumps(dict(zip(header, record)))
 

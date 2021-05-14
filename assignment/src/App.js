@@ -19,12 +19,13 @@ class App extends React.Component {
     };
 }
 
+ 
 
   setLogin = (user) => {
     this.setState({
       user
     });
-
+    console.log(this.state)
   }
 
   setLogout = () => {
@@ -50,7 +51,7 @@ class App extends React.Component {
                 <li><Link to="/new-post">New Post</Link></li>
               </ul>
               <ul className="navbar-right">
-                { this.state.user != null ? <li><Link to="/users/id">Hello {this.state.user.user}</Link></li>  :
+                { this.state.user != null ? <li><Link to={`/users/${this.state.user.user}`}>Hello {this.state.user.user}</Link></li>  :
                 ""
                 }
                 { this.state.user != null ? <li><Link to="/logout" onClick={this.setLogout}>Logout</Link></li>  :
