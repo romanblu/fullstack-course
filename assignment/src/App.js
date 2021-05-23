@@ -23,13 +23,17 @@ class App extends React.Component {
 
   setLogin = (user) => {
     this.setState({
+      userLoggedIn:true,
       user
     });
     console.log(this.state)
   }
 
   setLogout = () => {
+    console.log("LOGGED OUT ")
+
     this.setState({
+      userLoggedIn:false,
       user: null
     });  
   }
@@ -81,7 +85,7 @@ class App extends React.Component {
               <NewPost />
             </Route>
             <Route path="/logout">
-                
+                {this.setLogout}
               <Redirect to="/"></Redirect>
             </Route>
             <Route path="/">
