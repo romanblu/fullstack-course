@@ -1,21 +1,26 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
-import MainPage from './Components/pages/MainPage';
-import About from './Components/pages/About';
-import SignIn from './Components/pages/SignIn';
-import SignUp from './Components/pages/SignUp';
-import PostPage from './Components/pages/PostPage';
-import NewPost from './Components/pages/NewPost';
+import MainPage from './pages/MainPage';
+import About from './pages/About';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import PostPage from './pages/PostPage';
+import NewPost from './pages/NewPost';
+import Logout from './pages/Logout';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = { 
       userLoggedIn: false, 
-      user: null  
+      user: null,
+      newPost: {
+        title: "",
+        content: ""
+      }
     };
 }
 
@@ -32,10 +37,17 @@ class App extends React.Component {
   setLogout = () => {
     console.log("LOGGED OUT ")
 
-    this.setState({
-      userLoggedIn:false,
-      user: null
-    });  
+    const url = "/api/logout"
+    const data = { }
+    axios.post(url, data).then(res => {
+      console.log("Logged out successfully");
+        
+      this.setState({
+        userLoggedIn:false,
+        user: null
+      });  
+    })
+
   }
 
 
@@ -59,7 +71,7 @@ class App extends React.Component {
                 ""
                 }
                 { this.state.user != null ? <li><Link to="/logout" onClick={this.setLogout}>Logout</Link></li>  :
-                <li><Link to="signin">Sign In</Link></li>
+                <li><Link to="/signin">Sign In</Link></li>
                 }
               </ul>
           </div>
@@ -78,16 +90,16 @@ class App extends React.Component {
               <SignUp onSignIn={this.setLogin}/>
               {this.state.user != null ? <Redirect to="/" /> : "" }
             </Route>
+            <Route path="/logout">  
+              <Logout user={this.state.user}/>
+            </Route>
             <Route path="/post/:id" component={PostPage}>
             </Route>
             
             <Route path="/new-post">
               <NewPost />
             </Route>
-            <Route path="/logout">
-                {this.setLogout}
-              <Redirect to="/"></Redirect>
-            </Route>
+          
             <Route path="/">
               <MainPage />
             </Route>

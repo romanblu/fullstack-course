@@ -1,6 +1,6 @@
 import React from 'react';
-import PostsList from '../PostsList';
-import Post from '../Post';
+import PostsList from '../Components/PostsList';
+import Post from '../Components/Post';
 import axios from 'axios';
 
 class PostPage extends React.Component {
@@ -46,7 +46,7 @@ class PostPage extends React.Component {
     ];
 
     getUserById = (id) => {
-        const url  = "/users/" + id;
+        const url  = "/api/users/" + id;
         axios.get(url).then((res) => {
             this.setState({
               user:res.data,
@@ -58,7 +58,7 @@ class PostPage extends React.Component {
     }
 
     getPostById = (id) => {
-        const url = "/posts/" + id;
+        const url = "/api/posts/" + id;
         axios.get(url).then((res) => {
           this.setState({
             data:res.data,

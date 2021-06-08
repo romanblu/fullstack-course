@@ -95,8 +95,6 @@ a {
 img {
   height: 100%;
   display: block;
-  /* margin-right: auto; */
-  /* margin-left: auto; */
 }
 
 .bold {
@@ -170,7 +168,7 @@ ul {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  position: relative;
+  margin-bottom: 20px;
 }
 
 .new-post > label {
@@ -179,14 +177,22 @@ ul {
 }
 
 .submit-post {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  /* position: absolute; */
+  /* right: 0; */
+  /* bottom: 0; */
+  width: 120px;
+  height: 40px;
+  margin-left: auto;
+  margin-top: 15px;
 }
 
 #new-post-content {
   height: 300px;
   width: 500px;
+}
+
+#post-image {
+  /* width: 50%; */
 }
 
 .smaller-font {

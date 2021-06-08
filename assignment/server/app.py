@@ -1,4 +1,5 @@
 from flask import Flask, request, abort, make_response
+from flask.globals import session
 import requests
 import mysql.connector as mysql
 from settings import apikey, dbpwd
@@ -16,11 +17,7 @@ db = mysql.connect(
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello():
-	return 'Hello World!'
-
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
 	data = request.get_json()
 	query = "select id, password from users where username = %s "
@@ -46,7 +43,35 @@ def login():
 	
 	return resp
 
-@app.route('/signup', methods=['POST'])
+@app.route('/api/logout', methods=['POST'])
+def logout():
+	id = validate_session()
+	print("SESSION ID ", id)
+	query = "delete from sessions where session_id = %s"
+	values = (id,)
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	db.commit()
+	resp = make_response()
+	resp.set_cookie('session_id' ,'', expires=0)
+	cursor.close()
+	return resp
+    	
+def validate_session():
+	session_id = request.cookies.get('session_id')
+	print(request.cookies.get('session_id'))
+	if not session_id:
+		abort(401)
+	query = "select user_id from sessions where session_id = %s"
+	cursor = db.cursor()
+	values = (session_id,)
+	cursor.execute(query, values)
+	record = cursor.fetchone()
+	if not record:
+		abort(401)
+	return session_id
+
+@app.route('/api/signup', methods=['POST'])
 def signup():
 	data = request.get_json()
 	query = "insert into users (username, password) values(%s, %s)"
@@ -59,9 +84,8 @@ def signup():
 	cursor.close()
 	return get_user(new_post_id)
 
-@app.route('/posts/<id>')
+@app.route('/api/posts/<id>')
 def get_post(id):
-	print("GETTING  POSTS  ID " + id)
 	query = "select id, title, content, image, author_id from posts where id = %s"
 	values = (id, )
 	cursor = db.cursor()
@@ -71,9 +95,7 @@ def get_post(id):
 	header = ['id', 'title', 'content', 'image', 'author_id']
 	return json.dumps(dict(zip(header, record)))
 
-
-
-@app.route('/posts', methods=['GET', 'POST'])
+@app.route('/api/posts', methods=['GET', 'POST'])
 def manage_posts():
 	if request.method == 'GET':
 		return get_all_posts()
@@ -82,7 +104,6 @@ def manage_posts():
 
 def add_post():
 	data = request.get_json()
-	print(data)
 	query = "insert into posts (title, content, image, author_id) values(%s, %s, %s, %s)"
 	values = (data['title'], data['content'], data['image'], data['author_id'])
 	cursor = db.cursor()
@@ -98,17 +119,14 @@ def get_all_posts():
 	cursor.execute(query)
 	records = cursor.fetchall()
 	cursor.close()
-	print(records)
 	header = ['id', 'title', 'content', 'image', 'author_id']
 	data = []
 	for r in records:
 		data.append(dict(zip(header,r)))
-	print(data)
 	return json.dumps(data)
 
-@app.route('/users/<id>')
+@app.route('/api/users/<id>')
 def get_user(id):
-	print("GETTING USER ID " , id)
 	query = "select id, username, password from users where id = %s"
 	values = (id, )
 	cursor = db.cursor()

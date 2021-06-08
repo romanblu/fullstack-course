@@ -1,6 +1,6 @@
 import React from 'react';
-import Post from '../Post';
-import PostsList from '../PostsList';
+import Post from '../Components/Post';
+import PostsList from '../Components/PostsList';
 import axios from 'axios';
 
 class MainPage extends React.Component{
@@ -11,14 +11,17 @@ class MainPage extends React.Component{
 
 
     getUserById =async (id) => {
-        const url  = "/users/" + id;
+        const url  = "/api/users/" + id;
         axios.get(url).then((res) => {
             return res.data;
         });
     }
+    getAuthorNameById = () => {
 
+    }
+    
     getAllPosts = () => {
-        const url = "/posts";
+        const url = "/api/posts";
         axios.get(url).then((res) => {
             
           console.log(res.data);
@@ -30,21 +33,15 @@ class MainPage extends React.Component{
       }
     
 
-      getAuthorNameById = (id) => {
-
-      }
     
       componentDidMount(){
         this.getAllPosts();
       }
 
     render() {
-
-        console.log(this.state.data);
-
         const postItems = this.state.data.map(post => (
             
-            <Post title={post.title} description={post.content} image={post.image}
+            <Post key={post.id} title={post.title} description={post.content} image={post.image}
                  authorName={"Roman"}
                 imageSrc={post.image}
             id={post.id} name={this.getAuthorNameById(post.authorId)} />

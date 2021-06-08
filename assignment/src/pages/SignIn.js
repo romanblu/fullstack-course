@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {Button, TextField, Box, Grid, Container, Typography} from '@material-ui/core';
+import {Button, TextField, Box, Container, Typography} from '@material-ui/core';
 
 class SignIn extends React.Component {
     constructor(props){
@@ -28,7 +28,7 @@ class SignIn extends React.Component {
 
     login = (e) => {
         e.preventDefault();
-        const url = "/login";
+        const url = "/api/login";
         const data = {
             user : this.state.user,
             password: this.state.password
