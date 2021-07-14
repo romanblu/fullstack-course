@@ -1,0 +1,85 @@
+import React from 'react';
+import axios from 'axios';
+
+class NewPost extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            title:'',
+            content:'',
+            image:''
+        }
+
+        this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.handleContentChange = this.handleContentChange.bind(this);
+        this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        // this.getCurrentUser = this.getCurrentUser.bind(this);
+    }
+
+    handleTitleChange(event) {
+        this.setState({title: event.target.value});
+
+    }
+
+    handleContentChange(event) {
+        this.setState({content: event.target.value});
+
+    }
+
+    handleImageUrlChange(event){
+        this.setState({image: event.target.value});
+    }
+    
+    getCurrentUser(){
+        
+        const session_id = document.cookie;
+        console.log("Session id  ", session_id.split('=')[1] );
+        if(session_id){
+            const url = "/api/user";
+            axios.get(url).then(res => {
+                console.log(res.data.user_id);
+            });
+        }
+
+    }
+
+    handleSubmit(){
+        // send new post to server
+        console.log("Title: ", this.state.title);
+        console.log("Content: ", this.state.content);
+        console.log("Image: ", this.state.image);
+        const url = '/api/posts/';
+        const data = {};
+        const user_id = this.getCurrentUser();
+        axios.post(url, data).then(res => {
+            
+        });
+        
+    }
+
+    render  (){
+        return (
+            
+            <div>
+                <div className="container">
+                    <div className="new-post">
+                        <h1>New Post</h1>
+                        <label htmlFor="post-title">Title: </label>
+                        <input type="text" id="post-title" value={this.state.title} onChange={this.handleTitleChange}/>
+                        <label htmlFor="post-content">Write Post Content:</label>
+                        <textarea name="content" id="new-post-content" cols="30" rows="10" className="new-post-content" 
+                        value={this.state.content} onChange={this.handleContentChange}></textarea>
+                        <p className="characters-left smaller-font">256 characters left</p>
+                        <label htmlFor="post-image">Enter image url: </label>
+                        <input type="text" id="post-image" value={this.state.image} onChange={this.handleImageUrlChange}/>
+                        <button type="submit" value="Send Post" className="submit-post" onClick={this.handleSubmit}>Send Post</button>
+                    </div>
+                    
+                </div>
+            </div>
+        );
+    }
+}
+
+export default NewPost;
