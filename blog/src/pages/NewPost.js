@@ -54,7 +54,7 @@ class NewPost extends React.Component {
         console.log("New post data ", data)
         
         axios.post(url, data).then(res => {
-            
+            console.log("NEW POST ADDED");
         });
         
     }

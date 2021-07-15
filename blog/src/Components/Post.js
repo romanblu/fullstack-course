@@ -13,16 +13,19 @@ class Post extends React.Component {
             authorName: "",
             authorId: this.props.authorId,
             image: this.props.imageSrc,
-            loggedUser : this.props.loggedUser,
+            loggedUser : this.props.currentUser,
             isAuthor: false
         }
     }
 
     componentDidMount(){
-        if(!this.state.loggedUser){
+        
+        if(!this.props.currentUser){
             this.setState({isAuthor:false});
         }else{
-            if(this.state.loggedUser.id === this.state.authorId){
+            console.log("logged user id and author id", this.state.loggedUser)
+            
+            if(this.state.loggedUser.userId === this.state.authorId){
                 this.setState({isAuthor:true});
             }
         }
@@ -54,6 +57,7 @@ class Post extends React.Component {
 
     render() {
         {console.log("PROPS ",this.props)}
+        {console.log("STATE ",this.state)}
         return (
                 <div className="post" onClick={console.log("clicked ")}>
                     <div className="content">
