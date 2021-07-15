@@ -14,7 +14,6 @@ class NewPost extends React.Component {
         this.handleContentChange = this.handleContentChange.bind(this);
         this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.getCurrentUser = this.getCurrentUser.bind(this);
     }
 
     handleTitleChange(event) {
@@ -31,27 +30,29 @@ class NewPost extends React.Component {
         this.setState({image: event.target.value});
     }
     
-    getCurrentUser(){
+    // getCurrentUser(){
         
-        const session_id = document.cookie;
-        console.log("Session id  ", session_id.split('=')[1] );
-        if(session_id){
-            const url = "/api/user";
-            axios.get(url).then(res => {
-                console.log(res.data.user_id);
-            });
-        }
+    //     const session_id = document.cookie;
+    //     console.log("Session id  ", session_id.split('=')[1] );
+    //     if(session_id){
+    //         const url = "/api/user";
+    //         axios.get(url).then(res => {
+    //             console.log(res.data.user_id);
+    //         });
+    //     }
 
-    }
+    // }
 
     handleSubmit(){
         // send new post to server
-        console.log("Title: ", this.state.title);
-        console.log("Content: ", this.state.content);
-        console.log("Image: ", this.state.image);
-        const url = '/api/posts/';
-        const data = {};
-        const user_id = this.getCurrentUser();
+        const url = '/api/posts';
+        const data = {
+            title:this.state.title,
+            content: this.state.content,
+            image: this.state.image,
+            author_id: this.props.user.userId};
+        console.log("New post data ", data)
+        
         axios.post(url, data).then(res => {
             
         });

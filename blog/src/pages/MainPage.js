@@ -36,7 +36,7 @@ class MainPage extends React.Component{
         });
       }
     
-
+      
     
       componentDidMount(){
         this.getAllPosts();
@@ -54,7 +54,10 @@ class MainPage extends React.Component{
                 authorId={post.author_id}
                 imageSrc={post.image}
                 id={post.id} 
-                name={"Romeo"} />
+                name={"Romeo"} 
+                currentUser={this.props.loggedUser}
+                deletePost={this.props.deletePost}
+                editPost={this.props.editPost}/>
             
         ));
         
@@ -86,6 +89,7 @@ class MainPage extends React.Component{
                 destination:"#"
             }
         ];
+        console.log("current logged user ", this.state.loggedUser)
 
         return (
             <div>

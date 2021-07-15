@@ -99,7 +99,8 @@ def get_post(id):
 def manage_posts():
 	if request.method == 'GET':
 		return get_all_posts()
-	else:
+	if request.method == 'POST':
+		print("ADDING POST")
 		return add_post()
 
 def add_post():

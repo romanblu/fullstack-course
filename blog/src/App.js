@@ -18,15 +18,16 @@ class App extends React.Component {
       userLoggedIn: false, 
       user: null,
       
+      
     };
 }
   componentDidMount(){
     const url = "/api/user";
+
     if(this.state.user == null){
         axios.get(url).then(res => {
           const user_id = res.data.user_id;
           axios.get('/api/users/' + user_id).then(res => {
-            
             this.setState({
               user : 
               {username: res.data.username, 
@@ -34,7 +35,7 @@ class App extends React.Component {
               userLoggedIn: true
             });
           });
-      });
+      }).catch(() => console.log("No user logged in"));
     }
     
   }
@@ -48,6 +49,14 @@ class App extends React.Component {
         });
     });
     
+  }
+
+  editPost = (id) => {
+    console.log("EDITING POST ", id); 
+  }
+
+  deletePost = (id) => {
+    console.log("deleting POST ", id); 
   }
 
   setLogout = () => {
@@ -113,7 +122,8 @@ class App extends React.Component {
               <NewPost user={this.state.user} />
             </Route>
             <Route path="/">
-              <MainPage />
+              <MainPage loggedUser={this.state.user || undefined} editPost={this.editPost}
+               deletePost={this.deletePost} />
             </Route>
           </Switch>
         </Router>      
