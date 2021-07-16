@@ -22,20 +22,10 @@ class App extends React.Component {
     };
 }
   componentDidMount(){
-    const url = "/api/user";
-
+    
     if(this.state.user == null){
-        axios.get(url).then(res => {
-          const user_id = res.data.user_id;
-          axios.get('/api/users/' + user_id).then(res => {
-            this.setState({
-              user : 
-              {username: res.data.username, 
-              userId: res.data.id},
-              userLoggedIn: true
-            });
-          });
-      }).catch(() => console.log("No user logged in"));
+      
+        this.getUserData();
     }
     
   }
@@ -43,9 +33,12 @@ class App extends React.Component {
   setLogin = (user) => {
     const url = "/api/user";
     axios.get(url).then(res => {
+        localStorage.setItem('username', user.user);
+        localStorage.setItem('userId', res.data.user_id);
+        console.log("USER RESPONSE ", res);
         this.setState({
           userLoggedIn:true,
-          user: {username: user.user, userId: res.data.user_id}
+          user: {username: user.user, userId: res.data.user_id},
         });
     });
     
@@ -72,8 +65,24 @@ class App extends React.Component {
 
   }
 
+  getUserData(){
+    const url = "/api/user";
+    axios.get(url).then(res => {
+      const user_id = res.data.user_id;
+      axios.get('/api/users/' + user_id).then(res => {
+        console.log("USER RES", res)
+        this.setState({
+          user : {username: res.data.username, userId: res.data.id},
+          userLoggedIn: true
+        });
+        
+      });
+  }).catch(() => console.log("No user logged in"));
+  }
+
   render(){
 
+    console.log("USER ID FROM LOCAL STORAGE ", localStorage);
 
     return (
       <div className="App">

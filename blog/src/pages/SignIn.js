@@ -40,7 +40,6 @@ class SignIn extends React.Component {
                 resp: "Success, user logged in ",
                 error: false
             });
-            console.log("RESPONSE ", res);
             this.props.onSignIn(data);
 
         }).catch(err => {

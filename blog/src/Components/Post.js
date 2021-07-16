@@ -13,27 +13,33 @@ class Post extends React.Component {
             authorName: "",
             authorId: this.props.authorId,
             image: this.props.imageSrc,
-            loggedUser : this.props.currentUser,
+            loggedUser : this.props.currentUser, // issue - not rerendering when app gets current user 
             isAuthor: false
         }
-    }
+    } 
+
 
     componentDidMount(){
-        
         if(!this.props.currentUser){
             this.setState({isAuthor:false});
         }else{
-            console.log("logged user id and author id", this.state.loggedUser)
             
-            if(this.state.loggedUser.userId === this.state.authorId){
+            if(this.props.currentUser.userId === this.state.authorId){
                 this.setState({isAuthor:true});
             }
         }
     }
 
-  
-    getPost(){
-        
+    componentDidUpdate(prevProps){
+        if(prevProps.currentUser !== this.props.currentUser){
+            if(!this.props.currentUser){
+                this.setState({isAuthor:false});
+            }else{
+                if(this.props.currentUser.userId === this.state.authorId){
+                    this.setState({isAuthor:true});
+                }
+            }
+        }
     }
 
     handlePostDelete = () => {
@@ -56,8 +62,6 @@ class Post extends React.Component {
     
 
     render() {
-        {console.log("PROPS ",this.props)}
-        {console.log("STATE ",this.state)}
         return (
                 <div className="post" onClick={console.log("clicked ")}>
                     <div className="content">
