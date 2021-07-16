@@ -26,11 +26,11 @@ def login():
 	cursor.execute(query, values)
 	record = cursor.fetchone()
 	if not record:
-    		abort(401)
+			abort(401)
 	user_id = record[0]
 	hashed_pwd = record[1].encode('utf-8')
 	if bcrypt.hashpw(data['password'].encode('utf-8'), hashed_pwd) != hashed_pwd:
-    		abort(401) 
+			abort(401)
 
 	session_id = str(uuid.uuid4())
 	query = "insert into sessions (user_id, session_id) values (%s, %s) on duplicate key update session_id=%s"
@@ -56,7 +56,7 @@ def logout():
 	resp.set_cookie('session_id' ,'', expires=0)
 	cursor.close()
 	return resp
-    	
+
 def validate_session():
 	session_id = request.cookies.get('session_id')
 	print(request.cookies.get('session_id'))
@@ -67,6 +67,7 @@ def validate_session():
 	values = (session_id,)
 	cursor.execute(query, values)
 	record = cursor.fetchone()
+	cursor.close()
 	if not record:
 		abort(401)
 	return session_id
@@ -84,7 +85,13 @@ def signup():
 	cursor.close()
 	return get_user(new_post_id)
 
-@app.route('/api/posts/<id>')
+@app.route('/api/posts/<id>', methods=['GET', 'DELETE'])
+def post_operations(id):
+	if request.method == 'GET':
+		return get_post(id)
+	if request.method == 'DELETE':
+		return delete_post(id)
+
 def get_post(id):
 	query = "select id, title, content, image, author_id from posts where id = %s"
 	values = (id, )
@@ -95,12 +102,21 @@ def get_post(id):
 	header = ['id', 'title', 'content', 'image', 'author_id']
 	return json.dumps(dict(zip(header, record)))
 
+def delete_post(id):
+	query = "DELETE FROM posts WHERE id = %s"
+	values = (id, )
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	db.commit()
+	cursor.close()
+	return "Deleted post "
+
+
 @app.route('/api/posts', methods=['GET', 'POST'])
 def manage_posts():
 	if request.method == 'GET':
 		return get_all_posts()
 	if request.method == 'POST':
-		print("ADDING POST")
 		return add_post()
 
 def add_post():
@@ -147,6 +163,7 @@ def check_login():
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	record = cursor.fetchone()
+	cursor.close()
 	if not record:
 		abort(401)
 	header = ['user_id']

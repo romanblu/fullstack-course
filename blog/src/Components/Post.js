@@ -49,16 +49,6 @@ class Post extends React.Component {
     handlePostEdit = () => {
         this.props.editPost(this.state.id);
     }
-
-    
-    validateAuthor ()  {
-        if(!this.props.currentUser){
-            return false;
-        }
-
-        return true;
-    }
-
     
 
     render() {

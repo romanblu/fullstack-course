@@ -24,7 +24,7 @@ class App extends React.Component {
   componentDidMount(){
     
     if(this.state.user == null){
-      
+
         this.getUserData();
     }
     
@@ -35,7 +35,6 @@ class App extends React.Component {
     axios.get(url).then(res => {
         localStorage.setItem('username', user.user);
         localStorage.setItem('userId', res.data.user_id);
-        console.log("USER RESPONSE ", res);
         this.setState({
           userLoggedIn:true,
           user: {username: user.user, userId: res.data.user_id},
@@ -50,6 +49,10 @@ class App extends React.Component {
 
   deletePost = (id) => {
     console.log("deleting POST ", id); 
+    const url = `api/posts/${id}`
+    axios.delete(url).then(res => {
+      console.log("Posts deleted")
+    }).catch((err) => console.log("Could not delete post. Error: ", err))
   }
 
   setLogout = () => {
