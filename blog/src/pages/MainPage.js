@@ -6,9 +6,20 @@ import axios from 'axios';
 class MainPage extends React.Component{
     constructor(props){
         super(props);
-        this.state = { data: []  };
+        this.state = { data: [] , hasUpdated:false };
     }
 
+    // trigger rerendering when some post changed
+    componentDidUpdate(prevProps){
+        if(this.state.hasUpdated === true){
+            this.getAllPosts();
+            this.setState({hasUpdated:false})
+        }
+    }
+
+    updatePosts = () => {
+        this.setState({hasUpdated:true})
+    }
 
     getUserById =async (id) => {
         const url  = "/api/users/" + id;
@@ -57,7 +68,8 @@ class MainPage extends React.Component{
                 name={"Romeo"} 
                 currentUser={this.props.loggedUser}
                 deletePost={this.props.deletePost}
-                editPost={this.props.editPost}/>
+                editPost={this.props.editPost}
+                hasUpdated={this.updatePosts}/>
             
         ));
         

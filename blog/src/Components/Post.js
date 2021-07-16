@@ -14,7 +14,8 @@ class Post extends React.Component {
             authorId: this.props.authorId,
             image: this.props.imageSrc,
             loggedUser : this.props.currentUser, // issue - not rerendering when app gets current user 
-            isAuthor: false
+            isAuthor: false,
+            hasUpdated: false
         }
     } 
 
@@ -44,6 +45,7 @@ class Post extends React.Component {
 
     handlePostDelete = () => {
         this.props.deletePost(this.state.id);
+        this.props.hasUpdated();
     }
 
     handlePostEdit = () => {
