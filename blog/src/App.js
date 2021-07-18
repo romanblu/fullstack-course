@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp';
 import PostPage from './pages/PostPage';
 import NewPost from './pages/NewPost';
 import Logout from './pages/Logout';
+import EditPost from './pages/EditPost';
 import axios from 'axios';
 
 
@@ -47,13 +48,6 @@ class App extends React.Component {
     console.log("EDITING POST ", id); 
   }
 
-  deletePost = (id) => {
-    console.log("deleting POST ", id); 
-    const url = `api/posts/${id}`
-    axios.delete(url).then(res => {
-      console.log("Posts deleted")
-    }).catch((err) => console.log("Could not delete post. Error: ", err))
-  }
 
   setLogout = () => {
     const url = "/api/logout"
@@ -133,6 +127,7 @@ class App extends React.Component {
             <Route path="/new-post">
               <NewPost user={this.state.user} />
             </Route>
+            <Route path="/edit-post/:postId" component={EditPost} />
             <Route path="/">
               <MainPage loggedUser={this.state.user || undefined} editPost={this.editPost}
                deletePost={this.deletePost} />

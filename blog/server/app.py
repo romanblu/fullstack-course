@@ -85,12 +85,14 @@ def signup():
 	cursor.close()
 	return get_user(new_post_id)
 
-@app.route('/api/posts/<id>', methods=['GET', 'DELETE'])
+@app.route('/api/posts/<id>', methods=['GET', 'DELETE','PUT'])
 def post_operations(id):
 	if request.method == 'GET':
 		return get_post(id)
 	if request.method == 'DELETE':
 		return delete_post(id)
+	if request.method == 'PUT':
+		return update_post(id)
 
 def get_post(id):
 	query = "select id, title, content, image, author_id from posts where id = %s"
@@ -111,6 +113,16 @@ def delete_post(id):
 	cursor.close()
 	return "Deleted post "
 
+def update_post(id):
+	data = request.get_json()
+	query = "UPDATE posts set title=(%s), content=(%s), image=(%s) where id=%s "
+	values = (data['title'], data['content'], data['image'], id)
+	print("UPDATING POST")
+	print(data['title'], data['content'], data['image'], id)
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	db.commit()
+	return "Post udated"
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def manage_posts():

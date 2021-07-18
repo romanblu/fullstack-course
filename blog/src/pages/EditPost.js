@@ -1,19 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react'
 import axios from 'axios';
 
-class NewPost extends React.Component {
+class EditPost extends Component {
     constructor(props){
         super(props);
         this.state = {
-            title:'',
-            content:'',
-            image:''
+            title:"",
+            content:"",
+            image:"",
+            postId: this.props.match.params.postId
         }
 
         this.handleTitleChange = this.handleTitleChange.bind(this);
         this.handleContentChange = this.handleContentChange.bind(this);
         this.handleImageUrlChange = this.handleImageUrlChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount(){
+        const url = `/api/posts/${this.props.match.params.postId}`;
+        axios.get(url).then((res) => {
+            console.log("Post data ",res);
+            this.setState({
+                title: res.data.title,
+                content: res.data.content,
+                image: res.data.image
+            })
+        }).catch(err => console.log("Could not retrieve post. Error: ", err));
     }
 
     handleTitleChange(event) {
@@ -29,27 +42,23 @@ class NewPost extends React.Component {
     handleImageUrlChange(event){
         this.setState({image: event.target.value});
     }
-    
-    
 
     handleSubmit(){
-        // send new post to server
-        const url = '/api/posts';
+       
+        console.log(this.state);
+        const url = `/api/posts/${this.props.match.params.postId}`;    
         const data = {
             title:this.state.title,
             content: this.state.content,
             image: this.state.image,
-            author_id: this.props.user.userId};
-        
-        axios.post(url, data).then(res => {
-            console.log("NEW POST ADDED");
-        });
-        
+            };
+        axios.put(url, data).then(res => console.log("SUCCESS ",res)).catch(err => console.log("error", err));
     }
+    
 
-    render  (){
+
+    render() {
         return (
-            
             <div>
                 <div className="container">
                     <div className="new-post">
@@ -67,8 +76,8 @@ class NewPost extends React.Component {
                     
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default NewPost;
+export default EditPost;

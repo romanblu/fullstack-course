@@ -1,6 +1,7 @@
 import React from 'react';
 import './post.css';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
+import axios from 'axios';
 
 class Post extends React.Component {
     constructor(props){
@@ -44,12 +45,18 @@ class Post extends React.Component {
     }
 
     handlePostDelete = () => {
-        this.props.deletePost(this.state.id);
+        const id = this.state.id;
+        const url = `api/posts/${id}`;
+        axios.delete(url).then(res => {
+          console.log("Posts deleted")
+        }).catch((err) => console.log("Could not delete post. Error: ", err))       
+        
         this.props.hasUpdated();
     }
 
     handlePostEdit = () => {
         this.props.editPost(this.state.id);
+        
     }
     
 
@@ -65,7 +72,17 @@ class Post extends React.Component {
                         <div className="post-date">Posted {this.props.datePosted} by {this.state.authorName}</div>
                         {this.state.isAuthor ? <div className="edit-delete">
                             <button onClick={this.handlePostDelete} className="delete-post">Delete</button> 
-                            <button onClick={this.handlePostEdit} className="edit-post">Edit</button>
+                            <button onClick={this.handlePostEdit} className="edit-post">
+                                <Link to={{pathname:`/edit-post/${this.state.id}`,
+                                            state:{title:this.state.title,
+                                                    content:this.state.content,
+                                                    image:this.state.image}
+                                            }
+                                        }>
+                                    Edit
+                                </Link>
+                                
+                            </button>
                         </div> : ''}
                     </div>
                     <div className="post-image">
