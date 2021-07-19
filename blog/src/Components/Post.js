@@ -1,7 +1,9 @@
 import React from 'react';
 import './post.css';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
+import PostComments from './PostComments';
+import './post.css';
 
 class Post extends React.Component {
     constructor(props){
@@ -59,21 +61,50 @@ class Post extends React.Component {
         
     }
     
-
+    editDeleteButtons = () => {
+        return (
+            this.state.isAuthor ? 
+            <div className="edit-delete">
+                <button onClick={this.handlePostDelete} className="delete-post">Delete</button> 
+                <button onClick={this.handlePostEdit} className="edit-post">
+                    <Link to={{pathname:`/edit-post/${this.state.id}`,
+                                state:{title:this.state.title,
+                                        content:this.state.content,
+                                        image:this.state.image}
+                                }
+                            }>
+                        Edit
+                    </Link>
+                    
+                </button>
+            </div> : 'Not author'
+        )
+    } 
     render() {
         return (
-                <div className="post" onClick={console.log("clicked ")}>
+                <div className="post">
                     <div className="content">
                         <div className="content-holder">
                             <h3><Link to={`/post/${this.state.id}`} className="blog-title">{this.props.title}</Link></h3>
                             
                             <p className="description">{this.props.description}</p>
+                            <div className="post-date">
+                                Posted {this.props.datePosted} by {this.state.authorName}
+                            </div>
+
                         </div>
-                        <div className="post-date">Posted {this.props.datePosted} by {this.state.authorName}</div>
-                        {this.state.isAuthor ? <div className="edit-delete">
-                            <button onClick={this.handlePostDelete} className="delete-post">Delete</button> 
+
+                        <div className="post-image">
+                            <img src={this.props.imageSrc} alt="nice alpaca"/>
+                        </div>
+
+                        
+                    </div>
+                    {this.state.isAuthor ? 
+                        <div className="edit-delete">
+                            <button class="delete-post-button" onClick={this.handlePostDelete} className="delete-post">Delete</button> 
                             <button onClick={this.handlePostEdit} className="edit-post">
-                                <Link to={{pathname:`/edit-post/${this.state.id}`,
+                                <Link class="edit-post-button" to={{pathname:`/edit-post/${this.state.id}`,
                                             state:{title:this.state.title,
                                                     content:this.state.content,
                                                     image:this.state.image}
@@ -83,15 +114,10 @@ class Post extends React.Component {
                                 </Link>
                                 
                             </button>
-                        </div> : ''}
-                    </div>
-                    <div className="post-image">
-                        <img src={this.props.imageSrc} alt="nice alpaca"/>
-                    </div>
+                        </div> : ''
+                    }
 
-                    <div className="post-comments">
-                        
-                    </div>
+                    <PostComments />
                 </div>
             );
     }

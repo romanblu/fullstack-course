@@ -45,7 +45,6 @@ class EditPost extends Component {
 
     handleSubmit(){
        
-        console.log(this.state);
         const url = `/api/posts/${this.props.match.params.postId}`;    
         const data = {
             title:this.state.title,
