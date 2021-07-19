@@ -117,7 +117,7 @@ class Post extends React.Component {
                         </div> : ''
                     }
 
-                    <PostComments />
+                    <PostComments postId={this.state.id} authorId={this.state.authorId}/>
                 </div>
             );
     }

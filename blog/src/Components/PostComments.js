@@ -1,7 +1,10 @@
 import React, {useState} from 'react'
+import axios from 'axios';
 
-export default function PostComments() {
-    const [showComments, setShowComments] = useState(false)
+export default function PostComments(props) {
+    const [showComments, setShowComments] = useState(false);
+    const [newCommentContent, setNewCommentContent] = useState('');
+
     const demoComments = [
         {
             authorName: 'Ricardo',
@@ -48,6 +51,22 @@ export default function PostComments() {
         setShowComments(false);
     }
 
+    const handleNewCommentChange = (event) => {
+        setNewCommentContent(event.target.value)
+    }
+
+    const submitNewComment = () => {
+        console.log("NEW COMMENT ",newCommentContent)
+        const url = `api/posts/${props.postId}/comments`;
+        const data = {
+            author_id:props.authorId,
+            
+            content:newCommentContent
+        }
+        console.log("COMMENT ", data);
+        axios.post(url, data).then(res => console.log("ADDED NEW COMMENT ")).catch(err => console.log("Error adding new comment: ", err));
+    }
+
     const Comments = demoComments.map(comment => 
          (<div className="comment">
              <div className="user-avatar">
@@ -80,8 +99,8 @@ export default function PostComments() {
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR06esYfQM8YO9mUMLqyA3hGkivXdCdry8I_Q&usqp=CAU" alt="" />
                 </div>
                 <div className="user-comment-input">
-                    <input type="text" placeholder="Say something smart please..." />
-                    <button class="send-comment">Send</button>
+                    <input type="text" onChange={handleNewCommentChange} value={newCommentContent} placeholder="Say something smart please..." />
+                    <button onClick={submitNewComment} className="send-comment" >Send</button>
                 </div>
 
             </div>

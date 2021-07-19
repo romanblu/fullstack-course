@@ -124,6 +124,23 @@ def update_post(id):
 	db.commit()
 	return "Post udated"
 
+@app.route('/api/posts/<id>/comments', methods=['GET', 'POST'])
+def comments(id):
+	if request.method == 'GET':
+		return ''
+	if request.method == 'POST':
+		return add_comment(id)
+
+def add_comment(id):
+	data = request.get_json()
+	query = "INSERT INTO comments (author_id, post_id, content) VALUES (%s, %s, %s)"
+	values = (data['author_id'], id, data['content'])
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	db.commit()
+	cursor.close()
+	return "Added new comment successfully"
+
 @app.route('/api/posts', methods=['GET', 'POST'])
 def manage_posts():
 	if request.method == 'GET':
