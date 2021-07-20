@@ -49,13 +49,18 @@ export default function PostComments(props) {
         const url = `api/posts/${props.postId}/comments`;
         axios.get(url).then(res => {
             console.log(res)
-            let allComments = res.data.map(comment => {
-                return comment;
+            let allComments = []
+            res.data.map(comment => {
+                axios.get(`api/users/${comment.author_id}`).then(user => {
+                    allComments.push({...comment, username: user.data.username})
+                })
             })
+            console.log("ALL COMMENTS ", allComments)
             setPostComments(allComments);
         })
         .catch(err => console.log("Error fetching comments ", err));
     }, [])
+
 
     const onShowComments = () => {
         setShowComments(true);
@@ -70,7 +75,6 @@ export default function PostComments(props) {
     }
 
     const submitNewComment = () => {
-        console.log("NEW COMMENT ",newCommentContent)
         const url = `api/posts/${props.postId}/comments`;
         const data = {
             author_id:props.authorId,
@@ -79,7 +83,6 @@ export default function PostComments(props) {
         }
         console.log("COMMENT ", data);
         axios.post(url, data).then(res => {
-            console.log("RETURNED COMMENT ",res)
             setPostComments([...postComments, {
                 comment_id: res.data.author_id,
                 author_id: res.data.author_id,
@@ -97,8 +100,8 @@ export default function PostComments(props) {
                 </div>
             <div className="comment-details">
                 <div className="comment-author-date">
-                    <p className="comment-author-name">{comment.authorName}</p>
-                    <p className="comment-date">{comment.date}</p>
+                    <p className="comment-author-name">{comment.username}</p>
+                    <p className="comment-date">Today at 15:05</p>
                 </div>
                 
                 <p className="comment-content">{comment.content}</p>
