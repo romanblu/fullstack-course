@@ -122,12 +122,13 @@ def update_post(id):
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
-	return "Post udated"
+	cursor.close()
+	return "Post updated"
 
 @app.route('/api/posts/<id>/comments', methods=['GET', 'POST'])
 def comments(id):
 	if request.method == 'GET':
-		return ''
+		return get_all_comments(id)
 	if request.method == 'POST':
 		return add_comment(id)
 
@@ -138,8 +139,35 @@ def add_comment(id):
 	cursor = db.cursor()
 	cursor.execute(query, values)
 	db.commit()
+	new_comment_id = cursor.lastrowid
+
 	cursor.close()
-	return "Added new comment successfully"
+	return get_comment(new_comment_id)
+
+def get_all_comments(id):
+	query = "SELECT id, author_id, post_id, content FROM comments WHERE post_id=%s"
+	values = (id, )
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	records = cursor.fetchall()
+	cursor.close()
+	header = [ 'comment_id', 'author_id', 'post_id', 'content']
+	data = []
+	for r in records:
+		data.append(dict(zip(header, r)))
+	return json.dumps(data)
+
+def get_comment(id):
+	query = "SELECT id, author_id, post_id, content FROM comments WHERE id=%s"
+	values = (id,)
+	cursor = db.cursor()
+	cursor.execute(query, values)
+	record = cursor.fetchone()
+	cursor.close()
+	header = ['comment_id', 'author_id', 'post_id', 'content']
+
+	return json.dumps(dict(zip(header, record)))
+
 
 @app.route('/api/posts', methods=['GET', 'POST'])
 def manage_posts():

@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import axios from 'axios';
 
 export default function PostComments(props) {
     const [showComments, setShowComments] = useState(false);
     const [newCommentContent, setNewCommentContent] = useState('');
+    const [postComments, setPostComments] = useState([])
 
     const demoComments = [
         {
@@ -43,6 +44,19 @@ export default function PostComments(props) {
         }
     ]
 
+    useEffect(() => {
+        console.log("rendered " + props.postId)
+        const url = `api/posts/${props.postId}/comments`;
+        axios.get(url).then(res => {
+            console.log(res)
+            let allComments = res.data.map(comment => {
+                return comment;
+            })
+            setPostComments(allComments);
+        })
+        .catch(err => console.log("Error fetching comments ", err));
+    }, [])
+
     const onShowComments = () => {
         setShowComments(true);
     }
@@ -64,11 +78,20 @@ export default function PostComments(props) {
             content:newCommentContent
         }
         console.log("COMMENT ", data);
-        axios.post(url, data).then(res => console.log("ADDED NEW COMMENT ")).catch(err => console.log("Error adding new comment: ", err));
+        axios.post(url, data).then(res => {
+            console.log("RETURNED COMMENT ",res)
+            setPostComments([...postComments, {
+                comment_id: res.data.author_id,
+                author_id: res.data.author_id,
+                post_id: res.data.post_id,
+                content: res.data.content
+            }])
+            setNewCommentContent('')
+        }).catch(err => console.log("Error adding new comment: ", err));
     }
 
-    const Comments = demoComments.map(comment => 
-         (<div className="comment">
+    const Comments = postComments.map(comment => 
+         (<div  className="comment">
              <div className="user-avatar">
                     <img src="https://assets.atdw-online.com.au/images/9a9e6bc10a768c84cb66b7fda9149e2a.jpeg?rect=0,1071,3672,2754&w=745&h=559&&rot=360" alt="" />
                 </div>
